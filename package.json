@@ -1,0 +1,27 @@
+{
+  "name": "feach-home-test-backend",
+  "version": "1.0.0",
+  "description": "home test solution for fetch.com internship",
+  "main": "index.js",
+  "directories": {
+    "doc": "doc"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MondoGao/fetch-be-home-test.git"
+  },
+  "keywords": [
+    "koa",
+    "interview",
+    "fetch"
+  ],
+  "author": "Mondo <mondogao@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MondoGao/fetch-be-home-test/issues"
+  },
+  "homepage": "https://github.com/MondoGao/fetch-be-home-test#readme"
+}
