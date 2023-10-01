@@ -1,20 +1,23 @@
-import * as express from 'express';
-import * as bodyParser from 'body-parser';
-import { PORT } from './config/env';
-import { registerRouter } from './registerRouters';
-import { appLogger, loggerMiddleware } from './logger';
+import * as Koa from 'koa';
+import * as bodyParser from 'koa-bodyparser';
 
-async function start(port: number, hostname = '0.0.0.0') {
+import { PORT } from './config/env';
+import { registerRouters } from './registerRouters';
+import { appLogger, loggerMiddleware } from './logger';
+import { asyncReturnMiddleware } from './middleware/asyncReturn';
+
+async function start(port: number, hostname = '0.0.0.0'): Promise<Koa> {
   return new Promise((resolve, reject) => {
-    const app = express();
+    const app = new Koa();
     app.on('error', reject);
 
-    app.use(bodyParser.json());
-    app.use(loggerMiddleware)
+    app.use(loggerMiddleware);
+    app.use(bodyParser());
+    app.use(asyncReturnMiddleware);
 
-    registerRouter(app);
+    registerRouters(app);
 
-    app.listen(port, hostname, null, () => {
+    app.listen(port, hostname, () => {
       appLogger.info(`Server started on http://${hostname}:${port}`);
       if (hostname === '0.0.0.0') {
         appLogger.info(`Local entrypoint: http://127.0.0.1:${port}`);

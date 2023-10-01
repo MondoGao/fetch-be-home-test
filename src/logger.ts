@@ -1,5 +1,5 @@
 import * as winston from 'winston';
-import { ExpressRoute } from './helper/async';
+import { Middleware } from 'koa';
 const { combine, printf, timestamp } = winston.format;
 
 const reqFormat = printf(({ level, message, label = 'server', timestamp }) => {
@@ -14,11 +14,22 @@ export const appLogger = winston.createLogger({
     new winston.transports.Console(),
   ],
 });
-export const loggerMiddleware: ExpressRoute = async (req, res, next) => {
-  const msg = `${req.method} ${req.originalUrl}`;
+export const loggerMiddleware: Middleware = async (ctx, next) => {
+  const { req } = ctx;
+
+  const start = Date.now();
+  const msg = `${req.method} ${req.url}`;
   const reqLogger = appLogger.child({
     label: msg,
   });
-  res.locals.logger = reqLogger;
-  next();
+  ctx.logger = reqLogger;
+  await next();
+  const ms = Date.now() - start;
+  appLogger.info(`${msg} - ${ms}ms`);
 };
+
+declare module 'koa' {
+  interface DefaultContext {
+    logger: winston.Logger;
+  }
+}

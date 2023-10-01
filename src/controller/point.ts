@@ -1,20 +1,20 @@
-import { Router } from 'express';
-import { AsyncRoute, wrapAsyncRoute } from '../helper/async';
+import { Middleware } from 'koa';
+import * as Router from '@koa/router';
 
-const router = Router();
+const router = new Router();
 export { router as pointRouter };
 
-export const add: AsyncRoute = async () => {
+export const add: Middleware = async () => {
   return 'add';
 };
-router.post('/add', wrapAsyncRoute(add));
+router.post('/add', add);
 
-export async function spend() {
+export const spend: Middleware = async () => {
   return 'spend';
-}
-router.post('/spend', wrapAsyncRoute(spend));
-export const balance: AsyncRoute = async (req, res) => {
-  res.locals.logger.info('balance');
+};
+router.post('/spend', spend);
+export const balance: Middleware = async (ctx) => {
+  ctx.logger.info('balance');
   return 'balance';
 };
-router.get('/balance', wrapAsyncRoute(balance));
+router.get('/balance', balance);
