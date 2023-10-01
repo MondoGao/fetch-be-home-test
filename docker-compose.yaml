@@ -1,16 +1,16 @@
 services:
- db:
-  image: mysql:8
-  enviroment:
-    MYSQL_ROOT_PASSWORD: fetchrewards
-    MYSQL_DATABASE: fetch
-    MYSQL_USER: fetch-be
-    MYSQL_PASSWORD: fetch-be
-  volume:
-    - ./.database:/var/lib/mysql
-  ports:
-    - 3306:3306
-adminer:
-  image: adminer
-  ports:
-    - 8080:8080
+  db:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: fetchrewards
+      MYSQL_DATABASE: fetch
+      MYSQL_USER: fetch-be
+      MYSQL_PASSWORD: fetch-be
+    volumes:
+      - ./.database:/var/lib/mysql
+    ports:
+      - 3306:3306
+  adminer:
+    image: adminer
+    ports:
+      - 8080:8080
