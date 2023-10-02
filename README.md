@@ -15,8 +15,11 @@
 You can run this application without node enviroment, simple run:
 
 ```bash
+# remember to start docker daemon :)
 ./start.sh
 ```
+
+Health check may takes several seconds to notice mysql's status, please wait patiently until see "Server started on 0.0.0.0:8000".
 
 To exit, press ctrl-c or ctrl-d.
 
@@ -64,7 +67,9 @@ After the server printing "Server started on <host>:<port>", you can start to te
 ### Test
 
 * Using Paw/RapidAPI: open the paw file in doc/manualTest.paw
-* Integration Test(unfinished): run `npm run test:integration:deps`, wait for mysql `ready for connections` tip, then run `npm run test:integration`
+* Integration Test: 
+  1. run `npm run test:integration:deps`, wait for mysql `ready for connections` tip;
+  2. then run `npm run test:integration`
 
 ## Some Extra Note
 
