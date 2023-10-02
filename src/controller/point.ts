@@ -11,7 +11,7 @@ import {
   computePayerBalance,
   computeTotalBalance,
   spendPoints,
-} from '../service/transaction';
+} from '../modelAction/transaction';
 
 const router = new Router();
 export { router as pointRouter };

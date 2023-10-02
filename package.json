@@ -14,7 +14,9 @@
     "prepare": "husky install",
     "lint": "tsc --noEmit && eslint \"**/*.ts\" --quiet",
     "lint:fix": "tsc --noEmit && eslint \"**/*.ts\" --quiet --fix",
-    "test": "npm run lint"
+    "test:integration": "npm run test:integration:deps && test:integration:run",
+    "test:integration:run": "NODE_ENV=test jest --runInBand --forceExit",
+    "test:integration:deps": "docker-compose up -f docker-compose.test.yml -d && sleep 10"
   },
   "repository": {
     "type": "git",
@@ -37,6 +39,7 @@
     "@types/koa__router": "^12.0.1",
     "@types/koa-bodyparser": "^4.3.10",
     "@types/node": "^20.8.0",
+    "@types/supertest": "^2.0.13",
     "@types/verror": "^1.10.7",
     "@typescript-eslint/eslint-plugin": "^6.7.3",
     "@typescript-eslint/parser": "^6.7.3",

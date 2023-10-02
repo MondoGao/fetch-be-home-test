@@ -7,7 +7,7 @@ import { appLogger, loggerMiddleware } from './logger';
 import { asyncReturnMiddleware } from './middleware/asyncReturn';
 import { createConnection } from './connection';
 
-async function start(port: number, hostname = '0.0.0.0'): Promise<Koa> {
+export async function start(port: number, hostname = '0.0.0.0'): Promise<Koa> {
   try {
     const app = new Koa();
     const db = await createConnection();
