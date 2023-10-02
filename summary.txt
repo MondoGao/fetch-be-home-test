@@ -19,9 +19,9 @@ pros:
 - the use of docker-compose to test application on local env.
 - complete project quality toolchain (husky, eslint, commitlint) is set up.
 - includes an integration test example.
+- has basic logging function.
 
 cons:
-- the code is still buggy when add negative points.
 - it doesn't check the input data's shape in controller layer.
 - lack of unit test, the code is also hard to test (need a lot of mock).
 - lack of migration, instead use database sync feature of orm.
