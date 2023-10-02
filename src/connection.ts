@@ -5,7 +5,6 @@ import {
   DB_PASSWORD,
   DB_PORT,
   DB_USERNAME,
-  IS_DEV,
 } from './config/env';
 import { VError } from 'verror';
 import { appLogger } from './logger';
@@ -23,7 +22,8 @@ export async function createConnection() {
       username: DB_USERNAME,
       password: DB_PASSWORD,
       database: DB_DATABASE,
-      synchronize: IS_DEV,
+      // synchronize: IS_DEV,
+      synchronize: true,
       entities: [Transaction],
     });
 

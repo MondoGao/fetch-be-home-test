@@ -1,7 +1,48 @@
-1. Why did you choose the tools, libraries, and language you used for the coding exercise?
+1. Why did you choose the tools, libraries, and language you used for the coding
+exercise?
+
+I choose Typescript, Node.js and Koa as the application's base framework.
+
+I believe Node.js + Typescript is a good combination to balance between
+developing speed & robustnesss.
+
+As for the framework, I switched from express to koa because of Koa's async &
+await style, and I notices express doesn't support Koa's onion model (code
+before and after a same request in single middleware).
 
 
 2. What are the advantages and disadvantages of your solution?
 
+pros:
+- it applies MVC model.
+- the use of database, transaction to ensure data persistency. 
+- the use of docker-compose to test application on local env.
+- complete project quality toolchain (husky, eslint, commitlint) is set up.
+- includes an integration test example.
 
-3. What has been a favorite school/personal project thus far? What about it that challenged you?
+cons:
+- the code is still buggy when add negative points.
+
+
+3. What has been a favorite school/personal project thus far? What about it that
+challenged you?
+
+It should be the first time I developed a complex big data analysis procedure. 
+
+At that time, our team has to cut off dependency to another team's data
+processing logic, and I was assigned this task to develop our own capability to
+achieve the same result.
+
+The main idea of that project is to transform projects' dependency tree saved in
+a object storage service (like s3) into data records, and other platform can
+find a npm package's dependent projects.
+
+The main obstacles I met:
+1. Lack of peers' help: we didn't have anyone knew about how to develop a OLAP
+data procedure back then. The only friend I have is the document.  2. Out of
+boundary: I didn't have similar experiences at all.
+
+To be honest I was a little bit worried if I'm the best candidate to do that at
+start, but I was also excited to learn and apply something new during my job. I
+succeed to extend my job limit after the success of this project, an help my
+other teammates develop similar features afterwards.  

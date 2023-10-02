@@ -10,13 +10,16 @@
     "dev": "npm run dev:deps && npm run dev:start",
     "dev:start": "nodemon src/server.ts",
     "dev:deps": "docker-compose up -d",
+    "dev:deps:down": "docker-compose down",
     "build": "tsc -P tsconfig.build.json",
     "prepare": "husky install",
     "lint": "tsc --noEmit && eslint \"**/*.ts\" --quiet",
     "lint:fix": "tsc --noEmit && eslint \"**/*.ts\" --quiet --fix",
-    "test:integration": "npm run test:integration:deps && test:integration:run",
-    "test:integration:run": "NODE_ENV=test jest --runInBand --forceExit",
-    "test:integration:deps": "docker-compose up -f docker-compose.test.yml -d && sleep 10"
+    "test": "npm run test:integration",
+    "test:integration": "npm run test:integration:deps && npm run test:integration:run",
+    "test:integration:run": "NODE_ENV=test DB_PORT=3307 jest --runInBand --forceExit",
+    "test:integration:deps": "docker-compose -f docker-compose.test.yaml up -d",
+    "test:integration:deps:down": "docker-compose -f docker-compose.test.yaml down"
   },
   "repository": {
     "type": "git",
@@ -34,6 +37,7 @@
   },
   "homepage": "https://github.com/MondoGao/fetch-be-home-test#readme",
   "devDependencies": {
+    "@jest/globals": "^29.7.0",
     "@types/jest": "^29.5.5",
     "@types/koa": "^2.13.9",
     "@types/koa__router": "^12.0.1",

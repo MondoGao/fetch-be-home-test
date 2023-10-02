@@ -5,7 +5,6 @@ import * as Koa from 'koa';
 let app: Koa;
 let request: ReturnType<typeof supertest>;
 beforeAll(async () => {
-  process.env.DB_PORT = '3307';
   app = await start(8001, '127.0.0.1');
   request = supertest(app.callback());
 });
