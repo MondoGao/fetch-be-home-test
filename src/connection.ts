@@ -24,6 +24,7 @@ export async function createConnection() {
       database: DB_DATABASE,
       // synchronize: IS_DEV,
       synchronize: true,
+      bigNumberStrings: false,
       entities: [Transaction],
     });
 

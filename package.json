@@ -9,16 +9,17 @@
   "scripts": {
     "dev": "npm run dev:deps && npm run dev:start",
     "dev:start": "nodemon src/server.ts",
-    "dev:deps": "docker-compose up -d",
+    "dev:deps": "docker-compose up",
     "dev:deps:down": "docker-compose down",
     "build": "tsc -P tsconfig.build.json",
+    "start": "pm2 start dist/server.js --name feach-home-test-backend --no-daemon -f",
+    "stop": "pm2 stop feach-home-test-backend",
     "prepare": "husky install",
     "lint": "tsc --noEmit && eslint \"**/*.ts\" --quiet",
     "lint:fix": "tsc --noEmit && eslint \"**/*.ts\" --quiet --fix",
     "test": "npm run test:integration",
-    "test:integration": "npm run test:integration:deps && npm run test:integration:run",
-    "test:integration:run": "NODE_ENV=test DB_PORT=3307 jest --runInBand --forceExit",
-    "test:integration:deps": "docker-compose -f docker-compose.test.yaml up -d",
+    "test:integration": "NODE_ENV=test DB_PORT=3307 jest --runInBand --forceExit",
+    "test:integration:deps": "npm run test:integration:deps:down && docker-compose -f docker-compose.test.yaml up",
     "test:integration:deps:down": "docker-compose -f docker-compose.test.yaml down"
   },
   "repository": {
@@ -38,6 +39,7 @@
   "homepage": "https://github.com/MondoGao/fetch-be-home-test#readme",
   "devDependencies": {
     "@jest/globals": "^29.7.0",
+    "@types/bluebird": "^3.5.39",
     "@types/jest": "^29.5.5",
     "@types/koa": "^2.13.9",
     "@types/koa__router": "^12.0.1",
@@ -70,10 +72,12 @@
   },
   "dependencies": {
     "@koa/router": "^12.0.0",
+    "bluebird": "^3.7.2",
     "dotenv": "^16.3.1",
     "koa": "^2.14.2",
     "koa-bodyparser": "^4.4.1",
     "mysql2": "^3.6.1",
+    "pm2": "^5.3.0",
     "reflect-metadata": "^0.1.13",
     "typeorm": "^0.3.17",
     "verror": "^1.10.1",

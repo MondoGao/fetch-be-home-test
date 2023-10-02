@@ -34,6 +34,8 @@ After starting docker runtime, simply run following command in the project's roo
 
 ```bash
 docker-compose up
+# or 
+npm run dev:deps
 ```
 
 #### Start Node Server
@@ -47,7 +49,7 @@ After the server printing "Server started on <host>:<port>", you can start to te
 ### Test
 
 * Using Paw/RapidAPI: open the paw file in doc/manualTest.paw
-* Integration Test(unfinished): run `npm run test:integration:deps`, wait for mysql starting, then run `npm run test`
+* Integration Test(unfinished): run `npm run test:integration:deps`, wait for mysql `ready for connections` tip, then run `npm run test:integration`
 
 ## Some Extra Note
 

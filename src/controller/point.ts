@@ -47,10 +47,14 @@ export const balance: Middleware = async (ctx) => {
 
   const balanceByPayer = await computePayerBalance(db);
 
-  const formated = balanceByPayer.map(({ payer, balance }) => ({
-    payer,
-    points: balance,
-  }));
+  const formated: Record<string, number> = balanceByPayer.reduce(
+    (res, { payer, balance }) => ({
+      ...res,
+      [payer]: balance,
+    }),
+    {},
+  );
+  console.log(formated)
 
   return formated;
 };

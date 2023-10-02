@@ -1,6 +1,7 @@
 import { start } from '../src/server';
 import * as supertest from 'supertest';
 import * as Koa from 'koa';
+import * as Bluebird from 'bluebird';
 
 let app: Koa;
 let request: ReturnType<typeof supertest>;
@@ -17,8 +18,8 @@ it('Integration tests', async () => {
     { payer: 'DANNON', points: 1000, timestamp: '2022-11-02T14:00:00Z' },
   ];
 
-  await Promise.all(
-    addList.map((addData) => request.post('/add').send(addData).expect(200)),
+  await Bluebird.each(addList, (addData) =>
+    request.post('/add').send(addData).expect(200),
   );
 
   const spendData = { points: 5000 };

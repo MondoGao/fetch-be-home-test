@@ -94,12 +94,19 @@ export async function computePayerBalance(db: DataSource | EntityManager) {
     .groupBy('t.payer')
     .getRawMany<{
       payer: string;
-      gain: number;
-      spent: number;
-      balance: number;
+      gain: string;
+      spent: string;
+      balance: string;
     }>();
 
-  return res;
+  // Bug: https://github.com/typeorm/typeorm/issues/2708
+  // temporary workaround
+  return res.map(({ payer, gain, spent, balance }) => ({
+    payer,
+    gain: parseInt(gain, 10),
+    spent: parseInt(spent, 10),
+    balance: parseInt(balance, 10),
+  }));
 }
 
 /**

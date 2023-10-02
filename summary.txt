@@ -18,7 +18,7 @@ pros:
 - the use of database, ORM, transaction to ensure data persistency. 
 - the use of docker-compose to test application on local env.
 - complete project quality toolchain (husky, eslint, commitlint) is set up.
-- includes an integration test example.
+- includes an integration test.
 - has basic logging function.
 
 cons:
