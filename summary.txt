@@ -16,7 +16,7 @@ before and after a same request in single middleware).
 pros:
 - it applies MVC model.
 - the use of database, ORM, transaction to ensure data persistency. 
-- the use of docker-compose to test application on local env.
+- the use of docker-compose to test application on local env, I also provide the application's dockerfile to omit the enviroment setting process for reviewers.
 - complete project quality toolchain (husky, eslint, commitlint) is set up.
 - includes an integration test.
 - has basic logging function.

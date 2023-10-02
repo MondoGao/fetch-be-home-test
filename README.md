@@ -20,16 +20,16 @@ You can run this application without node enviroment, simple run:
 
 To exit, press ctrl-c or ctrl-d.
 
-### Manual Run
+## Development
 
-#### Prerequisition
+### Prerequisition
 
 If you want to run the application directly on your computer, your should install node.js's enviroment first:
 
 - Node.js >= 18
 - npm >= 10
 
-#### Install Depedencies
+### Install Depedencies
 
 After you finish setting up Node.js enviroment, run:
 
@@ -37,7 +37,7 @@ After you finish setting up Node.js enviroment, run:
 npm i
 ```
 
-#### Start Mysql
+### Start Mysql
 
 This application depends on mysql instance running in a docker container, I've included the docker-compose.yml in the root folder.
 
@@ -53,7 +53,7 @@ docker-compose up
 npm run dev:deps
 ```
 
-#### Start Node Server
+### Start Node Server
 
 ```bash
 npm run dev
