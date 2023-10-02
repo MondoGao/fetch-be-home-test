@@ -6,8 +6,12 @@
  */
 import { Middleware } from 'koa';
 import * as Router from '@koa/router';
-import { Transaction } from '../model/transaction';
-import { Wallet } from '../model/wallet';
+import {
+  addPoints,
+  computePayerBalance,
+  computeTotalBalance,
+  spendPoints,
+} from '../service/transaction';
 
 const router = new Router();
 export { router as pointRouter };
@@ -19,40 +23,50 @@ export interface AddRequest {
 }
 export const add: Middleware = async (ctx) => {
   const { db, request } = ctx;
-  const body = request.body as AddRequest;
+  const { payer, points, timestamp } = request.body as AddRequest;
 
-  const { payer, points, timestamp } = body;
-  await db.transaction(async (manager) => {
-    let wallet: Wallet = await manager.findOne(Wallet, {
-      where: { payer },
-    });
-    if (!wallet) {
-      wallet = manager.create(Wallet, { payer });
-      await manager.save(wallet);
-    }
-    const ins_transaction = manager.create(Transaction, {
-      points,
-      timestamp,
-    });
-    wallet.transactions.push(ins_transaction);
-    wallet.points += points;
-    await manager.save(wallet);
-    return wallet;
-  });
+  await addPoints(db, payer, points, timestamp);
 
   return '';
 };
 router.post('/add', add);
 
-export const spend: Middleware = async () => {
-  // const { db, request } = ctx;
-  // const body = request.body as AddRequest;
+export interface SpendRequest {
+  points: number;
+}
+export const spend: Middleware = async (ctx) => {
+  const { db, request } = ctx;
+  const { points: requestPoints } = request.body as SpendRequest;
 
-  // return 'spend';
+  // check if the user has enough points
+  const { balance } = await computeTotalBalance(db);
+
+  if (balance < requestPoints) {
+    ctx.status = 400;
+    return 'the user doesn’t have enough points.';
+  }
+
+  const spendResult = await spendPoints(db, requestPoints);
+
+  const resp = Object.keys(spendResult).map((payer) => ({
+    payer,
+    points: -spendResult[payer],
+  }));
+
+  return resp;
 };
 router.post('/spend', spend);
+
 export const balance: Middleware = async (ctx) => {
-  ctx.logger.info('balance');
-  return 'balance';
+  const { db } = ctx;
+
+  const balanceByPayer = await computePayerBalance(db);
+
+  const formated = balanceByPayer.map(({ payer, balance }) => ({
+    payer,
+    points: balance,
+  }));
+
+  return formated;
 };
 router.get('/balance', balance);

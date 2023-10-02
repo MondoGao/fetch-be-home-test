@@ -9,7 +9,6 @@ import {
 } from './config/env';
 import { VError } from 'verror';
 import { appLogger } from './logger';
-import { Wallet } from './model/wallet';
 import { Transaction } from './model/transaction';
 
 /**
@@ -25,7 +24,7 @@ export async function createConnection() {
       password: DB_PASSWORD,
       database: DB_DATABASE,
       synchronize: IS_DEV,
-      entities: [Wallet, Transaction],
+      entities: [Transaction],
     });
 
     const connection = await ds.initialize();

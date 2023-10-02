@@ -6,7 +6,6 @@
     "outDir": "dist",
     "noImplicitAny": true,
     "moduleResolution": "Node",
-    "baseUrl": "./",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
   },
