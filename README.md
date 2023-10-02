@@ -9,10 +9,25 @@
 
 - docker-cli & docker-compose-cli
 - any docker-compatible runtime (colima, docker for desktop, etc.)
+
+### Run with Docker Image
+
+You can run this application without node enviroment, simple run:
+
+```bash
+./start.sh
+```
+
+To exit, press ctrl-c or ctrl-d.
+
+### Manual Run
+
+#### Prerequisition
+
+If you want to run the application directly on your computer, your should install node.js's enviroment first:
+
 - Node.js >= 18
 - npm >= 10
-
-### Run
 
 #### Install Depedencies
 

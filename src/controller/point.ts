@@ -54,7 +54,6 @@ export const balance: Middleware = async (ctx) => {
     }),
     {},
   );
-  console.log(formated)
 
   return formated;
 };
