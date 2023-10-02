@@ -22,6 +22,8 @@ pros:
 
 cons:
 - the code is still buggy when add negative points.
+- it doesn't check the input data's shape in controller layer.
+- lack of unit test, the code is also hard to test (need a lot of mock).
 
 
 3. What has been a favorite school/personal project thus far? What about it that
