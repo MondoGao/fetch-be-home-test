@@ -24,7 +24,13 @@ npm i
 
 #### Start Mysql
 
-This application depends on mysql instance running in a docker container, I've included the docker-compose.yml in the root folder , simply run:
+This application depends on mysql instance running in a docker container, I've included the docker-compose.yml in the root folder.
+
+First you need to start your docker runtime:
+- docker desktop: run the GUI application.
+- colima: run `colima start`
+
+After starting docker runtime, simply run following command in the project's root folder:
 
 ```bash
 docker-compose up
