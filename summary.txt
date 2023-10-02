@@ -15,7 +15,7 @@ before and after a same request in single middleware).
 
 pros:
 - it applies MVC model.
-- the use of database, transaction to ensure data persistency. 
+- the use of database, ORM, transaction to ensure data persistency. 
 - the use of docker-compose to test application on local env.
 - complete project quality toolchain (husky, eslint, commitlint) is set up.
 - includes an integration test example.
@@ -24,6 +24,7 @@ cons:
 - the code is still buggy when add negative points.
 - it doesn't check the input data's shape in controller layer.
 - lack of unit test, the code is also hard to test (need a lot of mock).
+- lack of migration, instead use database sync feature of orm.
 
 
 3. What has been a favorite school/personal project thus far? What about it that

@@ -59,13 +59,12 @@ export async function spendPoints(
     }
 
     const transactionInses = await pendingTransaction.getMany();
-    console.log(transactionInses);
     // record the spent points for each payer
     const spendResult: Record<string, number> = {};
 
     transactionInses.reduce((leftRequestPoints, transactionIns) => {
       const leftPoints = transactionIns.points - transactionIns.spent;
-      const currentSpent = Math.min(leftPoints, requestPoints);
+      const currentSpent = Math.min(leftPoints, leftRequestPoints);
       transactionIns.spent += currentSpent;
       if (!spendResult[transactionIns.payer]) {
         spendResult[transactionIns.payer] = 0;
