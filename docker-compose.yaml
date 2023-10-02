@@ -7,10 +7,13 @@ services:
       MYSQL_USER: fetch-be
       MYSQL_PASSWORD: fetch-be
     volumes:
-      - ./.database:/var/lib/mysql
+      - db_data:/var/lib/mysql:rw
     ports:
       - 3306:3306
   adminer:
     image: adminer
     ports:
       - 8080:8080
+
+volumes:
+  db_data:
