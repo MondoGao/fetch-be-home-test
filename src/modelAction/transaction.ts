@@ -1,13 +1,12 @@
 import { VError } from 'verror';
 import { Transaction } from '../model/transaction';
 import { DataSource, EntityManager } from 'typeorm';
-import { appLogger } from '../logger';
 
 /**
  * Add points to the user.
  * @param db
  * @param payer
- * @param points - points might be negative, in this case we check the balance first.
+ * @param points - points might be negative, in this case we try to spend points.
  * @param timestamp
  */
 export async function addPoints(
@@ -17,13 +16,11 @@ export async function addPoints(
   timestamp: string,
 ) {
   if (points < 0) {
-    const { balance } = await computeTotalBalance(db, payer);
-    if (balance < -points) {
-      throw new VError('the user doesn’t have enough points');
-    }
+    await spendPoints(db, -points, payer);
+    return;
   }
 
-  return await db.transaction(async (manager) => {
+  await db.transaction(async (manager) => {
     const transactionIns = manager.create(Transaction, {
       payer,
       points,
@@ -62,6 +59,7 @@ export async function spendPoints(
     }
 
     const transactionInses = await pendingTransaction.getMany();
+    console.log(transactionInses);
     // record the spent points for each payer
     const spendResult: Record<string, number> = {};
 
@@ -80,7 +78,6 @@ export async function spendPoints(
     await manager.save(transactionInses);
     return spendResult;
   });
-  appLogger.info(JSON.stringify(spendResult));
   return spendResult;
 }
 
