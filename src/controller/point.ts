@@ -1,15 +1,8 @@
-/**
- * Point Controller.
- *
- * I ignore the service layer to simply the code, it's not recommended to call
- * model layer directly in controller's code.
- */
 import { Middleware } from 'koa';
 import * as Router from '@koa/router';
 import {
   addPoints,
   computePayerBalance,
-  computeTotalBalance,
   spendPoints,
 } from '../modelAction/transaction';
 
@@ -37,14 +30,6 @@ export interface SpendRequest {
 export const spend: Middleware = async (ctx) => {
   const { db, request } = ctx;
   const { points: requestPoints } = request.body as SpendRequest;
-
-  // check if the user has enough points
-  const { balance } = await computeTotalBalance(db);
-
-  if (balance < requestPoints) {
-    ctx.status = 400;
-    return 'the user doesn’t have enough points.';
-  }
 
   const spendResult = await spendPoints(db, requestPoints);
 

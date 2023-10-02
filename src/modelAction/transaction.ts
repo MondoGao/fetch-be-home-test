@@ -1,11 +1,13 @@
+import { VError } from 'verror';
 import { Transaction } from '../model/transaction';
 import { DataSource, EntityManager } from 'typeorm';
+import { appLogger } from '../logger';
 
 /**
  * Add points to the user.
  * @param db
  * @param payer
- * @param points
+ * @param points - points might be negative, in this case we check the balance first.
  * @param timestamp
  */
 export async function addPoints(
@@ -14,6 +16,13 @@ export async function addPoints(
   points: number,
   timestamp: string,
 ) {
+  if (points < 0) {
+    const { balance } = await computeTotalBalance(db, payer);
+    if (balance < -points) {
+      throw new VError('the user doesn’t have enough points');
+    }
+  }
+
   return await db.transaction(async (manager) => {
     const transactionIns = manager.create(Transaction, {
       payer,
@@ -34,14 +43,25 @@ export async function addPoints(
 export async function spendPoints(
   db: DataSource | EntityManager,
   requestPoints: number,
+  targetPayer?: string,
 ) {
+  // check balance
+  const { balance } = await computeTotalBalance(db, targetPayer);
+  if (balance < requestPoints) {
+    throw new VError('the user doesn’t have enough points');
+  }
+
   // do spend action
   const spendResult = await db.transaction(async (manager) => {
-    const transactionInses = await manager
+    const pendingTransaction = await manager
       .createQueryBuilder(Transaction, 't')
-      .orderBy('transaction.timestamp', 'ASC')
-      .where('t.points - t.spent > 0')
-      .getMany();
+      .orderBy('t.timestamp', 'ASC')
+      .where('t.points - t.spent > 0');
+    if (targetPayer) {
+      pendingTransaction.andWhere('t.payer = :targetPayer', { targetPayer });
+    }
+
+    const transactionInses = await pendingTransaction.getMany();
     // record the spent points for each payer
     const spendResult: Record<string, number> = {};
 
@@ -49,7 +69,7 @@ export async function spendPoints(
       const leftPoints = transactionIns.points - transactionIns.spent;
       const currentSpent = Math.min(leftPoints, requestPoints);
       transactionIns.spent += currentSpent;
-      if (spendResult[transactionIns.payer]) {
+      if (!spendResult[transactionIns.payer]) {
         spendResult[transactionIns.payer] = 0;
       }
       spendResult[transactionIns.payer] += currentSpent;
@@ -60,6 +80,7 @@ export async function spendPoints(
     await manager.save(transactionInses);
     return spendResult;
   });
+  appLogger.info(JSON.stringify(spendResult));
   return spendResult;
 }
 
@@ -75,7 +96,12 @@ export async function computePayerBalance(db: DataSource | EntityManager) {
     .addSelect('SUM(t.spent)', 'spent')
     .addSelect('SUM(t.points) - SUM(t.spent)', 'balance')
     .groupBy('t.payer')
-    .getRawMany<{ payer: string; gain: number; spent: number; balance: number }>();
+    .getRawMany<{
+      payer: string;
+      gain: number;
+      spent: number;
+      balance: number;
+    }>();
 
   return res;
 }
@@ -84,12 +110,22 @@ export async function computePayerBalance(db: DataSource | EntityManager) {
  * Compute the total points, total spent and balance of our special user.
  * @param db
  */
-export async function computeTotalBalance(db: DataSource | EntityManager) {
-  const { totalPoints, totalSpent } = await db
+export async function computeTotalBalance(
+  db: DataSource | EntityManager,
+  targetPayer?: string,
+) {
+  const pendingTransaction = db
     .createQueryBuilder(Transaction, 't')
     .select('SUM(t.points)', 'totalPoints')
-    .addSelect('SUM(t.spent)', 'totalSpent')
-    .getRawOne<{ totalPoints: number; totalSpent: number }>();
+    .addSelect('SUM(t.spent)', 'totalSpent');
+
+  if (targetPayer) {
+    pendingTransaction.andWhere('t.payer = :targetPayer', { targetPayer });
+  }
+  const { totalPoints, totalSpent } = await pendingTransaction.getRawOne<{
+    totalPoints: number;
+    totalSpent: number;
+  }>();
 
   const balance = totalPoints - totalSpent;
 
