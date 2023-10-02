@@ -16,7 +16,8 @@ before and after a same request in single middleware).
 pros:
 - it applies MVC model.
 - the use of database, ORM, transaction to ensure data persistency. 
-- the use of docker-compose to test application on local env, I also provide the application's dockerfile to omit the enviroment setting process for reviewers.
+- the use of docker-compose to test application on local env, I also provide the
+application's dockerfile to omit the enviroment setting process for reviewers.
 - complete project quality toolchain (husky, eslint, commitlint) is set up.
 - includes an integration test.
 - has basic logging function.
@@ -42,10 +43,10 @@ find a npm package's dependent projects.
 
 The main obstacles I met:
 1. Lack of peers' help: we didn't have anyone knew about how to develop a OLAP
-data procedure back then. The only friend I have is the document.  2. Out of
-boundary: I didn't have similar experiences at all.
+data procedure back then. The only friend I have is the document.
+2. Out of boundary: I didn't have similar experiences at all.
 
 To be honest I was a little bit worried if I'm the best candidate to do that at
 start, but I was also excited to learn and apply something new during my job. I
 succeed to extend my job limit after the success of this project, an help my
-other teammates develop similar features afterwards.  
+other teammates develop similar features afterwards.
