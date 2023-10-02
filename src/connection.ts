@@ -5,9 +5,12 @@ import {
   DB_PASSWORD,
   DB_PORT,
   DB_USERNAME,
+  IS_DEV,
 } from './config/env';
 import { VError } from 'verror';
 import { appLogger } from './logger';
+import { Wallet } from './model/wallet';
+import { Transaction } from './model/transaction';
 
 /**
  * Create connection to database.
@@ -21,7 +24,8 @@ export async function createConnection() {
       username: DB_USERNAME,
       password: DB_PASSWORD,
       database: DB_DATABASE,
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      synchronize: IS_DEV,
+      entities: [Wallet, Transaction],
     });
 
     const connection = await ds.initialize();

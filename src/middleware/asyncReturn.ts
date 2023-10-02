@@ -10,10 +10,10 @@ import { Middleware } from 'koa';
 export const asyncReturnMiddleware: Middleware = async (ctx, next) => {
   try {
     const res = await next();
-    if (!ctx.body && res) {
+    if (typeof ctx.body === 'undefined' && res) {
       ctx.body = res;
     }
-    if (!ctx.body && !res) {
+    if (typeof ctx.body === 'undefined' && !res) {
       ctx.state = '404';
       ctx.body = '404 Not Found';
     }
