@@ -7,7 +7,6 @@
     "doc": "doc"
   },
   "scripts": {
-    "dev": "npm run dev:deps && npm run dev:start",
     "dev:start": "nodemon src/server.ts",
     "dev:deps": "docker-compose up",
     "dev:deps:down": "docker-compose down",
