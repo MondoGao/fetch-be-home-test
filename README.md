@@ -59,7 +59,7 @@ npm run dev:deps
 ### Start Node Server
 
 ```bash
-npm run dev
+npm run dev:start
 ```
 
 After the server printing "Server started on <host>:<port>", you can start to test or modify the code.
