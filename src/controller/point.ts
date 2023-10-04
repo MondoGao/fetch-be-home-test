@@ -13,6 +13,7 @@ export interface AddRequest {
   payer: string;
   points: number;
   timestamp: string;
+
 }
 export const add: Middleware = async (ctx) => {
   const { db, request } = ctx;

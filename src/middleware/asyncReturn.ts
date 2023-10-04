@@ -22,8 +22,10 @@ export const asyncReturnMiddleware: Middleware = async (ctx, next) => {
     if (!ctx.body) {
       ctx.body = err?.message ?? String(err);
     }
-    if (ctx.status === 200) {
-      ctx.status = 500;
+    if (err.message.includes("the user doesn’t have enough points")) {
+      ctx.status = 400;
     }
+    // if (ctx.status === 200) {
+    // }
   }
 };

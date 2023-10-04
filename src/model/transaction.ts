@@ -2,9 +2,20 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+
+@Entity()
+export class User {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @OneToMany(() => Transaction, (transaction) => transaction.user)
+  transactions: Transaction[];
+}
 
 @Entity()
 export class Transaction {
@@ -38,4 +49,7 @@ export class Transaction {
 
   @UpdateDateColumn()
   updateAt: Date;
+
+  @ManyToOne(() => User, (user) => user.transactions)
+  user: Promise<User>;
 }

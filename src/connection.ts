@@ -8,7 +8,7 @@ import {
 } from './config/env';
 import { VError } from 'verror';
 import { appLogger } from './logger';
-import { Transaction } from './model/transaction';
+import { Transaction, User } from './model/transaction';
 
 /**
  * Create connection to database.
@@ -25,7 +25,7 @@ export async function createConnection() {
       // synchronize: IS_DEV,
       synchronize: true,
       bigNumberStrings: false,
-      entities: [Transaction],
+      entities: [Transaction, User],
     });
 
     const connection = await ds.initialize();

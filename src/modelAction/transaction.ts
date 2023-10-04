@@ -45,12 +45,13 @@ export async function spendPoints(
   // check balance
   const { balance } = await computeTotalBalance(db, targetPayer);
   if (balance < requestPoints) {
-    throw new VError('the user doesn’t have enough points');
+    const verr = new VError('the user doesn’t have enough points');
+    throw verr;
   }
 
   // do spend action
   const spendResult = await db.transaction(async (manager) => {
-    const pendingTransaction = await manager
+    const pendingTransaction = manager
       .createQueryBuilder(Transaction, 't')
       .orderBy('t.timestamp', 'ASC')
       .where('t.points - t.spent > 0');
@@ -117,20 +118,25 @@ export async function computeTotalBalance(
   db: DataSource | EntityManager,
   targetPayer?: string,
 ) {
-  const pendingTransaction = db
-    .createQueryBuilder(Transaction, 't')
-    .select('SUM(t.points)', 'totalPoints')
-    .addSelect('SUM(t.spent)', 'totalSpent');
+  try {
+    const pendingTransaction = db
+      .createQueryBuilder(Transaction, 't')
+      .select('SUM(t.points)', 'totalPoints')
+      .addSelect('SUM(t.spent)', 'totalSpent');
 
-  if (targetPayer) {
-    pendingTransaction.andWhere('t.payer = :targetPayer', { targetPayer });
+    if (targetPayer) {
+      pendingTransaction.andWhere('t.payer = :targetPayer', { targetPayer });
+    }
+    const { totalPoints, totalSpent } = await pendingTransaction.getRawOne<{
+      totalPoints: number;
+      totalSpent: number;
+    }>();
+
+    const balance = totalPoints - totalSpent;
+
+    return { totalPoints, totalSpent, balance };
+  } catch (err) {
+    const verr = new VError(err, '[spendPoints] error computing total balance');
+    throw verr;
   }
-  const { totalPoints, totalSpent } = await pendingTransaction.getRawOne<{
-    totalPoints: number;
-    totalSpent: number;
-  }>();
-
-  const balance = totalPoints - totalSpent;
-
-  return { totalPoints, totalSpent, balance };
 }
